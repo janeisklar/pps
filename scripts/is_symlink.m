@@ -10,7 +10,7 @@ if (ispc())
 end
 
 %% Check for symlink
-status = unix(sprintf('readlink %s', link)) == 0;
+status = unix(sprintf('readlink "%s"', link)) == 0;
 
 end
 

@@ -1,7 +1,11 @@
 clear all;
 clc;
 
-path ='../transfer/CLU12-P020_TRIO.MR.PHYSIKER_CWIND.0015.0177.2012.03.31.18.10.06.906250.59761262.IMA';
+if (ispc())
+    path ='..\\transfer';
+else
+    path ='../transfer';
+end
 exPath=regexpi(path,'(?<workingDir>.*)(?<mode>subjects|transfer)', 'names');
 
 workingDir=exPath.workingDir;
