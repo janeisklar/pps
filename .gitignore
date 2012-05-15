@@ -1,7 +1,13 @@
 scripts/**/*.ps
-transfer/*
+
 subjects/*
+!subjects/.gitignore
+
+transfer/*
+!transfer/.gitignore
+
 measurements/*
+!measurements/.gitignore
 
 # OS generated files #
 ######################
