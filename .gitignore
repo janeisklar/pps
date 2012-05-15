@@ -3,7 +3,7 @@ scripts/**/*.ps
 subjects/*
 !subjects/.gitignore
 
-transfer/*
+transfer*/*
 !transfer/.gitignore
 
 measurements/*

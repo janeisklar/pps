@@ -32,9 +32,3 @@ elseif(mode=='transfer')
 else
     throw(MException('PPS:invalidPath','Source Directory must be either "subject" or "transfer"'));
 end
-
-
-
-%copyfile('path','');
-
-%copy to subjects/subID/measure/scan_run
