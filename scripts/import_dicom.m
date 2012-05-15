@@ -2,23 +2,26 @@ function [ info ] = import_dicom(workingDir,fileName)
 %Imports a DICOM to the subject folder and creates the appropriate
 %folders and links
 
-workingDir      = get_full_path(workingDir);
-DS              = filesep(); 
+workingDir         = get_full_path(workingDir);
+DS                 = filesep(); 
 
 %% Read out basic information about the scan
-filePath        = strcat(workingDir,'transfer',DS,fileName);
-[info,header]   = fileinfo(filePath);
-scanId          = strcat('scan_', info.run);
+filePath           = strcat(workingDir,'transfer',DS,fileName);
+[info,header]      = fileinfo(filePath);
+scanId             = strcat('scan_', info.run);
 
 %% Gather paths to required folders
-subjectsDir     = lower(strcat(workingDir,        'subjects',         DS));
-subjectDir      = lower(strcat(subjectsDir,       info.subject,       DS));
-measurementDir  = lower(strcat(subjectDir,        info.measurement,   DS));
-scanDir         = lower(strcat(measurementDir,    scanId,             DS));
-dicomDir        = lower(strcat(scanDir,           'dicom',            DS));
-niftiDir        = lower(strcat(scanDir,           'nifti',            DS));
+subjectsDir        = lower(strcat(workingDir,        'subjects',         DS));
+subjectDir         = lower(strcat(subjectsDir,       info.subject,       DS));
+measurementDir     = lower(strcat(subjectDir,        info.measurement,   DS));
+scanDir            = lower(strcat(measurementDir,    scanId,             DS));
+dicomDir           = lower(strcat(scanDir,           'dicom',            DS));
+niftiDir           = lower(strcat(scanDir,           'nifti',            DS));
 
-dirs = {subjectsDir subjectDir measurementDir scanDir dicomDir niftiDir};
+measurementsDir    = lower(strcat(workingDir,        'measurements',     DS));
+measurementLinkDir = lower(strcat(measurementsDir,   info.measurement,   DS));
+
+dirs = {subjectsDir subjectDir measurementDir scanDir dicomDir niftiDir measurementsDir measurementLinkDir};
 
 %% Check if folders already exist or create them otherwise
 for dir=dirs
@@ -37,12 +40,17 @@ for dir=dirs
 end
 
 %% Create symbolic links to measurements and scans if not already existent
-scanLink        = lower(strcat(subjectsDir,       scanId));
-measurementLink = lower(strcat(measurementDir,    info.measurement));
 
-%if ( ~ is_symlink(scanLink) )
-%    status = create_symlink(strcat(info.subject, DS, info.measurement));
-%end
+measurementLink    = lower(strcat(measurementLinkDir,   scanId));
+scanTarget         = lower(strcat('..', DS, '..', DS, 'subjects', DS, info.subject, DS, info.measurement, DS, scanId));
+
+if ( ~ is_symlink(measurementLink) )
+    status = create_symlink(scanTarget, measurementLink);
+    
+    if ( status == 0 )
+        throw(MException('PPS:IOError','Failed in creating link from "%s" to "%s". Error message was "%s".', measurementLink, scanTarget, mess));
+    end
+end
 
 %% Move DICOM to the subject directory
 dicomPath               = lower(strcat(dicomDir, fileName));
