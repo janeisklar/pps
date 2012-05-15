@@ -1,7 +1,7 @@
 clear all;
 clc;
 
-path ='/sacher/raid/fmri/pps12/transfer/CLU12-P020_TRIO.MR.PHYSIKER_CWIND.0015.0177.2012.03.31.18.10.06.906250.59761262.IMA';
+path ='../transfer/CLU12-P020_TRIO.MR.PHYSIKER_CWIND.0015.0177.2012.03.31.18.10.06.906250.59761262.IMA';
 exPath=regexpi(path,'(?<workingDir>.*)(?<mode>subjects|transfer)', 'names');
 
 workingDir=exPath.workingDir;
@@ -19,11 +19,14 @@ elseif(mode=='transfer')
         
         import_dicom(workingDir,file);
         
+        % begin remove this in the final version
+        % if(i>10) break; end
+        % end remove
     end
     
     
 else
-    throw(MException('Id:id','Source Directory must be either "subject" or "transfer"'));
+    throw(MException('PPS:invalidPath','Source Directory must be either "subject" or "transfer"'));
 end
 
 
