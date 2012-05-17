@@ -1,24 +1,18 @@
 function process_scan_niftis( scanDir )
-%Checks the presence of a all niftis or coverts them otherwise
+%Checks if all the nifti files are present and creates missing files
 
-addpath('lib');
+DS          = filesep();
+dicomDir    = strcat(scanDir, 'dicom', DS);
+niftiDir    = strcat('..', DS, 'nifti', DS);
+nifti4dPath = strcat(niftiDir, 'vols.nii');
 
-data = struct();
-data.current_conversion             = 'convert';
-data.readfile_dir                   = '/Users/andre/Studium/Master/Master Semester 2/fMRI Project/Preprocessing/pps12/subjects/clu12-p020/7t/scan_0005/dicom';
-data.convert_format                 = 'nifti';
-data.writefile_dir_selected         = '/Users/andre/Studium/Master/Master Semester 2/fMRI Project/Preprocessing/pps12/subjects/clu12-p020/7t/scan_0005/';
-data.default_startpath              = data.writefile_dir_selected;
-data.readfile_filter                = '*.ima';
-data.define_writefile_subdir        = 'no';
-data.scanlistonly                   = 'no';
-data.first_scan                     = 'yes';
-data.anonymise                      = 'no';
-data.warning_text                   = '';
-data.workbar_off                    = 'no';
-data.number_of_conversions_complete = 0;
-data.features                       = '';
+%% Checks the presence of the 4D nifti file and creates it if non-existent
+if ( exist(strcat(dicomDir, nifti4dPath), 'file') == 0 )
 
-execute_sort_and_convert_Callback(data)
+    [success, error] = convert_dicom_to_nifti(dicomDir, nifti4dPath);
+
+    if ( ~ success )
+       throw(MException('PPS:DICOMConvert','Failed converting DICOMS to nifties. Error message was "%s".', error));
+    end
 
 end
