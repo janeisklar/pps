@@ -8,23 +8,11 @@ dicomDir    = strcat(scanDir, 'dicom');
 archiveName = 'dicom.tar.gz';
 archivePath = strcat(scanDir, 'dicom', DS, archiveName);
 
-dicomList   = ls(dicomDir);
-dicomList   = textscan(dicomList,'%s','EndOfLine');
-dicomList   = dicomList{1};
+%% Retrieve DICOM files
+[nDicoms, dicomList] = get_files_using_pattern(dicomDir, '\.ima$');
 
 %% Check if archive already present
 if ( exist(archivePath, 'file') > 0 )
-
-    %% Count DICOM files
-    nDicoms     = 0;
-
-    for i=1:length(dicomList)
-        file = dicomList{i};
-        
-        if (regexpi(file, '\.ima$'))
-            nDicoms = nDicoms + 1;
-        end
-    end
     
     %% Get number of files in the archive
     nFiles      = get_tar_file_count(archivePath);
