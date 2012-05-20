@@ -1,12 +1,18 @@
 function [ count, returnList ] = get_files_using_pattern( path, pattern )
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
+%Returns the list of files of the given directory after filtering them
+%using a regular expression
+
+count      = 0;
+returnList = {};
 
 fileList   = ls(path);
+
+if (strcmp(fileList, ''))
+   return 
+end
+
 fileList   = textscan(fileList,'%s','EndOfLine');
 fileList   = fileList{1};
-
-returnList = {};
 
 %% Keep files matching pattern
 for i=1:length(fileList)
