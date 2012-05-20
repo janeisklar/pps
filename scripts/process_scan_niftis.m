@@ -2,14 +2,35 @@ function process_scan_niftis( scanDir )
 %Checks if all the nifti files are present and creates missing files
 
 DS          = filesep();
-dicomDir    = strcat(scanDir, 'dicom', DS);
-niftiDir    = strcat('..', DS, 'nifti', DS);
+
+dicomDir    = strcat(scanDir,  'dicom', DS);
+
+rNiftiDir   = strcat('..', DS, 'nifti', DS);
+rNifti4dPath= strcat(rNiftiDir,'vols.nii');
+
+niftiDir    = strcat(scanDir,  'nifti', DS);
 nifti4dPath = strcat(niftiDir, 'vols.nii');
 
-%% Checks the presence of the 4D-nifti file and creates it if non-existent
-if ( exist(strcat(dicomDir, nifti4dPath), 'file') == 0 )
+%% Check if nifti conversion is necessary
+processing  = true;
+if ( exist(nifti4dPath, 'file') > 0 )
+    
+    % Get number of DICOMs
+    [nDicoms, ~] = get_files_using_pattern(dicomDir, '\.ima$');
+    
+    % Determine the number of volumes in the 4D-nifti
+    nVolumes = get_volume_count_nifti_4d(nifti4dPath);
+    
+    if (nVolumes >= nDicoms)
+        processing = false;
+    end
+end
 
-    [success, error] = convert_dicom_to_nifti(dicomDir, nifti4dPath);
+
+%% If necessary DICOMs are converted into a 4D-nifti
+if ( processing )
+
+    [success, error] = convert_dicom_to_nifti(dicomDir, rNifti4dPath);
 
     if ( ~ success )
        throw(MException('PPS:DICOMConvert','Failed converting DICOMS to nifties. Error message was "%s".', error));
@@ -17,8 +38,6 @@ if ( exist(strcat(dicomDir, nifti4dPath), 'file') == 0 )
 
 end
 
-niftiDir    = strcat(scanDir,  'nifti', DS);
-nifti4dPath = strcat(niftiDir, 'vols.nii');
 
 %% Split up 4D-nifti into 3D-nifti files containing a single volume if non-existent
 split_nifti_4d(nifti4dPath, niftiDir, 'vol');
