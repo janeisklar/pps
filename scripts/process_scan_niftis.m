@@ -41,3 +41,12 @@ end
 
 %% Split up 4D-nifti into 3D-nifti files containing a single volume if non-existent
 split_nifti_4d(nifti4dPath, niftiDir, 'vol');
+
+%% Compute some statistical derivates
+meanPath = strcat(niftiDir, 'mean.nii');
+stdPath  = strcat(niftiDir, 'std.nii');
+snrPath  = strcat(niftiDir, 'snr.nii');
+
+create_mean_volume(nifti4dPath, meanPath)
+create_std_volume(nifti4dPath,  stdPath)
+create_snr_volume(meanPath,     stdPath, snrPath)
