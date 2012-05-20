@@ -1,31 +1,28 @@
 clear all;
 clc;
 
+%% DEBUG STUFF *REMOVE*
 if (ispc())
     path ='..\\transfer';
 else
     path ='../transfer';
 end
-exPath=regexpi(path,'(?<workingDir>.*)(?<mode>subjects|transfer)', 'names');
 
-workingDir=exPath.workingDir;
-mode=exPath.mode;
-inputDir=strcat(workingDir,mode);
+%% Extract path information
+exPath      = regexpi(path,'(?<workingDir>.*)(?<mode>subjects|transfer)', 'names');
+workingDir  = exPath.workingDir;
+mode        = exPath.mode;
+inputDir    = strcat(workingDir,mode);
 
-if(mode=='subjects')
-    %preprosessing
-elseif(mode=='transfer')
-    list = ls(inputDir);
-    sepList=textscan(list,'%s','EndOfLine');
+if (strcmp(mode,'subjects'))
+    %% Preprosessing
     
-    for i=1:length(sepList{1})
-        file=sepList{1}{i};
-        
-        import_dicom(workingDir,file);
-        
-        % begin remove this in the final version
-        % if(i>10) break; end
-        % end remove
+elseif (strcmp(mode,'transfer'))
+    %% Transfer files and convert them
+    [~,importFiles] = get_files_using_pattern(inputDir, '\.ima$');
+    
+    for file=importFiles
+        import_dicom(workingDir,file{1});
     end
     
     
