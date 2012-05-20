@@ -6,7 +6,7 @@ dicomDir    = strcat(scanDir, 'dicom', DS);
 niftiDir    = strcat('..', DS, 'nifti', DS);
 nifti4dPath = strcat(niftiDir, 'vols.nii');
 
-%% Checks the presence of the 4D nifti file and creates it if non-existent
+%% Checks the presence of the 4D-nifti file and creates it if non-existent
 if ( exist(strcat(dicomDir, nifti4dPath), 'file') == 0 )
 
     [success, error] = convert_dicom_to_nifti(dicomDir, nifti4dPath);
@@ -16,3 +16,9 @@ if ( exist(strcat(dicomDir, nifti4dPath), 'file') == 0 )
     end
 
 end
+
+niftiDir    = strcat(scanDir,  'nifti', DS);
+nifti4dPath = strcat(niftiDir, 'vols.nii');
+
+%% Split up 4D-nifti into 3D-nifti files containing a single volume if non-existent
+split_nifti_4d(nifti4dPath, niftiDir, 'vol');
