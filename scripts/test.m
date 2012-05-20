@@ -18,14 +18,15 @@ if (strcmp(mode,'subjects'))
     %% Preprosessing
     
 elseif (strcmp(mode,'transfer'))
-    %% Transfer files and convert them
+    %% Transfer files
     [~,importFiles] = get_files_using_pattern(inputDir, '\.ima$');
     
     for file=importFiles
         import_dicom(workingDir,file{1});
     end
     
-    
+    %% Convert files and do some basic processing
+    process_all_scans(workingDir);
 else
     throw(MException('PPS:invalidPath','Source Directory must be either "subject" or "transfer"'));
 end
