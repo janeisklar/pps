@@ -38,9 +38,8 @@ if ( processing )
 
 end
 
-
-%% Split up 4D-nifti into 3D-nifti files containing a single volume if non-existent
-split_nifti_4d(nifti4dPath, niftiDir, 'vol');
+% %% Split up 4D-nifti into 3D-nifti files containing a single volume if non-existent
+%split_nifti_4d(nifti4dPath, niftiDir, 'vol');
 
 %% Compute some statistical derivates
 meanPath = strcat(niftiDir, 'mean.nii');

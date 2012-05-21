@@ -21,8 +21,9 @@ elseif (strcmp(mode,'transfer'))
     %% Transfer files
     [~,importFiles] = get_files_using_pattern(inputDir, '\.ima$');
     
-    for file=importFiles
-        import_dicom(workingDir,file{1});
+    for i=1:length(importFiles)
+        file=importFiles{i};
+        import_dicom(workingDir,file);
     end
     
     %% Convert files and do some basic processing
