@@ -9,8 +9,8 @@ if (ispc())
 end
 
 %% Use the shell tar utility to list the files in the archive and count them
-[~, r]  = unix(sprintf('tar tf "%s" | grep -i .ima | wc -l', tarPath));
-count   = str2num(strtrim(r));
+[unused, r]  = unix(sprintf('tar tf "%s" | grep -i .ima | wc -l', tarPath));
+count        = str2num(strtrim(r));
 
 end
 

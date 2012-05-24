@@ -10,7 +10,8 @@ if (ispc())
 end
 
 %% Create the symlink
-[status, ~] = unix(sprintf('ln -s "%s" "%s"', source, target)) == 0;
+[status, unused] = unix(sprintf('ln -s "%s" "%s"', source, target));
+status           = (status == 0);
 
 end
 

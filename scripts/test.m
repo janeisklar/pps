@@ -19,7 +19,7 @@ if (strcmp(mode,'subjects'))
     
 elseif (strcmp(mode,'transfer'))
     %% Transfer files
-    [~,importFiles] = get_files_using_pattern(inputDir, '\.ima$');
+    [unused,importFiles] = get_files_using_pattern(inputDir, '\.ima$');
     
     for i=1:length(importFiles)
         file=importFiles{i};

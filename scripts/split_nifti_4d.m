@@ -11,10 +11,10 @@ end
 if ( exist(nifti4DPath, 'file') > 0 )
     
     % Determine the number of 3D-niftis
-    [nNiftis, ~] = get_files_using_pattern(nifti3DPath, strcat('^', nifti3DName, '\d*\.nii$'));
+    [nNiftis, unused] = get_files_using_pattern(nifti3DPath, strcat('^', nifti3DName, '\d*\.nii$'));
     
     % Determine the number of volumes in the 4D-nifti
-    nVolumes = get_volume_count_nifti_4d(nifti4DPath);
+    nVolumes          = get_volume_count_nifti_4d(nifti4DPath);
     
     % Stop processing if the volume amount matches the file count
     if (nNiftis >= nVolumes)

@@ -6,20 +6,23 @@ workingDir         = get_full_path(workingDir);
 DS                 = filesep(); 
 
 %% Read out basic information about the scan
+fileName           = lower(fileName);
 filePath           = strcat(workingDir,'transfer',DS,fileName);
 [info,header]      = fileinfo(filePath);
+subject            = lower(info.subject);
+measurement        = lower(info.measurement);
 scanId             = strcat('scan_', info.run);
 
 %% Gather paths to required folders
-subjectsDir        = lower(strcat(workingDir,        'subjects',         DS));
-subjectDir         = lower(strcat(subjectsDir,       info.subject,       DS));
-measurementDir     = lower(strcat(subjectDir,        info.measurement,   DS));
-scanDir            = lower(strcat(measurementDir,    scanId,             DS));
-dicomDir           = lower(strcat(scanDir,           'dicom',            DS));
-niftiDir           = lower(strcat(scanDir,           'nifti',            DS));
+subjectsDir        = strcat(workingDir,        'subjects',         DS);
+subjectDir         = strcat(subjectsDir,       subject,            DS);
+measurementDir     = strcat(subjectDir,        measurement,        DS);
+scanDir            = strcat(measurementDir,    scanId,             DS);
+dicomDir           = strcat(scanDir,           'dicom',            DS);
+niftiDir           = strcat(scanDir,           'nifti',            DS);
 
-measurementsDir    = lower(strcat(workingDir,        'measurements',     DS));
-measurementLinkDir = lower(strcat(measurementsDir,   info.measurement,   DS));
+measurementsDir    = strcat(workingDir,        'measurements',     DS);
+measurementLinkDir = strcat(measurementsDir,   measurement,        DS);
 
 dirs = {subjectsDir subjectDir measurementDir scanDir dicomDir niftiDir measurementsDir measurementLinkDir};
 
@@ -41,10 +44,10 @@ end
 
 %% Create symbolic links to measurements and scans if not already existent
 
-measurementLink    = lower(strcat(measurementLinkDir,   scanId));
-scanTarget         = lower(strcat('..', DS, '..', DS, 'subjects', DS, info.subject, DS, info.measurement, DS, scanId));
+measurementLink    = strcat(measurementLinkDir,   scanId);
+scanTarget         = strcat('..', DS, '..', DS, 'subjects', DS, subject, DS, measurement, DS, scanId);
 
-if ( ~ is_symlink(measurementLink) )
+if ( ~is_symlink(measurementLink) )
     status = create_symlink(scanTarget, measurementLink);
     
     if ( status == 0 )
@@ -53,7 +56,7 @@ if ( ~ is_symlink(measurementLink) )
 end
 
 %% Move DICOM to the subject directory
-dicomPath               = lower(strcat(dicomDir, fileName));
+dicomPath               = strcat(dicomDir, fileName);
 [status, mess, messid]  = movefile(filePath, dicomPath);
 
 if ( status == 0 )

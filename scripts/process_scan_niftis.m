@@ -16,7 +16,7 @@ processing  = true;
 if ( exist(nifti4dPath, 'file') > 0 )
     
     % Get number of DICOMs
-    [nDicoms, ~] = get_files_using_pattern(dicomDir, '\.ima$');
+    [nDicoms, unused] = get_files_using_pattern(dicomDir, '\.ima$');
     
     % Determine the number of volumes in the 4D-nifti
     nVolumes = get_volume_count_nifti_4d(nifti4dPath);
@@ -32,7 +32,7 @@ if ( processing )
 
     [success, error] = convert_dicom_to_nifti(dicomDir, rNifti4dPath);
 
-    if ( ~ success )
+    if ( ~success )
        throw(MException('PPS:DICOMConvert','Failed converting DICOMS to nifties. Error message was "%s".', error));
     end
 
