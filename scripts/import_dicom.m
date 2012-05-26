@@ -9,9 +9,11 @@ DS                 = filesep();
 fileName           = lower(fileName);
 filePath           = strcat(workingDir,'transfer',DS,fileName);
 [info,header]      = fileinfo(filePath);
-subject            = lower(info.subject);
-measurement        = lower(info.measurement);
-scanId             = strcat('scan_', info.run);
+subject            = lower(header.PatientName.FamilyName);
+measurement        = lower(header.PatientName.GivenName);
+scanId             = strcat('scan_', sprintf('%04d', header.SeriesNumber));
+paradigm           = lower(header.ProtocolName);
+scanDate           = datestr(datenum(header.AcquisitionDate, 'yyyymmdd'), 'yyyy-mm-dd');
 
 %% Gather paths to required folders
 subjectsDir        = strcat(workingDir,        'subjects',         DS);
@@ -22,9 +24,10 @@ dicomDir           = strcat(scanDir,           'dicom',            DS);
 niftiDir           = strcat(scanDir,           'nifti',            DS);
 
 measurementsDir    = strcat(workingDir,        'measurements',     DS);
-measurementLinkDir = strcat(measurementsDir,   measurement,        DS);
+measurementDateDir = strcat(measurementsDir,   scanDate,           DS);
+measurementLinkDir = strcat(measurementDateDir,subject,            DS);
 
-dirs = {subjectsDir subjectDir measurementDir scanDir dicomDir niftiDir measurementsDir measurementLinkDir};
+dirs = {subjectsDir subjectDir measurementDir scanDir dicomDir niftiDir measurementsDir measurementDateDir measurementLinkDir};
 
 %% Check if folders already exist or create them otherwise
 for dir=dirs
@@ -45,7 +48,7 @@ end
 %% Create symbolic links to measurements and scans if not already existent
 
 measurementLink    = strcat(measurementLinkDir,   scanId);
-scanTarget         = strcat('..', DS, '..', DS, 'subjects', DS, subject, DS, measurement, DS, scanId);
+scanTarget         = strcat('..', DS, '..', DS, '..', DS, 'subjects', DS, subject, DS, measurement, DS, scanId);
 
 if ( ~is_symlink(measurementLink) )
     status = create_symlink(scanTarget, measurementLink);
