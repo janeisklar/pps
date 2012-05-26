@@ -11,7 +11,8 @@ filePath           = strcat(workingDir,'transfer',DS,fileName);
 [info,header]      = fileinfo(filePath);
 subject            = lower(header.PatientName.FamilyName);
 measurement        = lower(header.PatientName.GivenName);
-scanId             = strcat('scan_', sprintf('%04d', header.SeriesNumber));
+scanRun            = header.SeriesNumber;
+scanId             = strcat('scan_', sprintf('%04d', scanRun));
 paradigm           = lower(header.ProtocolName);
 scanDate           = datestr(datenum(header.AcquisitionDate, 'yyyymmdd'), 'yyyy-mm-dd');
 
@@ -62,8 +63,20 @@ end
 
 paradigmLink       = strcat(measurementDir, paradigm);
 scanTarget         = scanId;
+createParadigmLink = true;
 
-if ( ~is_symlink(paradigmLink) )
+if ( is_symlink(paradigmLink) )
+    existingScanRun = get_scan_run_from_link(paradigmLink);
+    
+    if (scanRun <= existingScanRun )
+        createParadigmLink = false;
+    else
+        remove_symlink(paradigmLink);
+    end
+end
+
+
+if ( createParadigmLink )
     status = create_symlink(scanTarget, paradigmLink);
     
     if ( status == 0 )
