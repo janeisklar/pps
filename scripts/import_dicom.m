@@ -45,7 +45,7 @@ for dir=dirs
     throw(MException('PPS:IOError','Failed in creating directory "%s". Error message was "%s".', dir{1}, mess));
 end
 
-%% Create symbolic links to measurements and scans if not already existent
+%% Create symbolic links from measurements dir to the scans if not already existent
 
 measurementLink    = strcat(measurementLinkDir,   scanId);
 scanTarget         = strcat('..', DS, '..', DS, '..', DS, 'subjects', DS, subject, DS, measurement, DS, scanId);
@@ -55,6 +55,19 @@ if ( ~is_symlink(measurementLink) )
     
     if ( status == 0 )
         throw(MException('PPS:IOError','Failed in creating link from "%s" to "%s". Error message was "%s".', measurementLink, scanTarget, mess));
+    end
+end
+
+%% Create symbolic links from the paradigm name to the corresponding scan if not already existent
+
+paradigmLink       = strcat(measurementDir, paradigm);
+scanTarget         = scanId;
+
+if ( ~is_symlink(paradigmLink) )
+    status = create_symlink(scanTarget, paradigmLink);
+    
+    if ( status == 0 )
+        throw(MException('PPS:IOError','Failed in creating link from "%s" to "%s". Error message was "%s".', paradigmLink, scanTarget, mess));
     end
 end
 
