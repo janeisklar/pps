@@ -31,4 +31,3 @@ command = strcat(command, sprintf('mri_convert -it siemens_dicom -ot nii *.0001.
 success = (s == 0);
 
 end
-

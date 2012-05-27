@@ -22,6 +22,9 @@ try
     
     %% Do the actual preprocessing
     % TBD
+    
+    %% Validate the processing steps
+    pps_verify_scan(scanDir);
 
 catch e
     
