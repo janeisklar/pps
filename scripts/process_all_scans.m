@@ -34,11 +34,7 @@ for i=1:length(subjects)
             if ( ~exist(lockPath, 'file') )
                 process_scan(scanPath);
             end
-            
-            %% If we got till here without errors, mark this scan folder as processed
-            fid = fopen(lockPath, 'w');
-            fwrite(fid, '');
-            fclose(fid);
+
         end
     end
 end

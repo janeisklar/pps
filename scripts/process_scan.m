@@ -1,11 +1,45 @@
-function [ output_args ] = process_scan( scanDir )
+function [ ] = process_scan( scanDir )
 %Process a directory of a scan
 %   handles nifti-conversion and DICOM-archiving
 
-%% Check presence of niftis
-process_scan_niftis(scanDir);
+success = true;
 
-%% Check presence of DICOM tar archive
-process_scan_archive(scanDir);
+try
+
+    %% Check presence of niftis
+    success = process_scan_niftis(scanDir);
     
+    if ( ~success )
+        return;
+    end
+
+    %% Check presence of DICOM tar archive
+    process_scan_archive(scanDir);
+
+    if ( ~success )
+        return;
+    end
+    
+    %% Do the actual preprocessing
+    % TBD
+
+catch e
+    
+    %% In case of an error write error message to the designated error file
+    errorPath   = strcat(scanDir, 'error.fmri');
+    fid         = fopen(errorPath, 'w');
+    fwrite(fid, e.message);
+    fclose(fid);
+    
+    success     = false;
+end
+
+%% If we got till here without errors, mark this scan as processed
+if success
+    lockPath    = strcat(scanDir, 'ok.fmri');
+    fid         = fopen(lockPath, 'w');
+    fwrite(fid, '');
+    fclose(fid);
+end
+
 end

@@ -18,7 +18,7 @@ for i=1:length(dirList)
     dir     = dirList{i};
     dirPath = strcat(path, dir);
     
-    if (isdir(dirPath))
+    if (isdir(dirPath) && ~is_symlink(dirPath))
         returnList{end+1} = dir;
     end
 end

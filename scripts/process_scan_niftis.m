@@ -1,6 +1,7 @@
-function process_scan_niftis( scanDir )
+function [ success ] = process_scan_niftis( scanDir )
 %Checks if all the nifti files are present and creates missing files
 
+success     = true;
 DS          = filesep();
 
 dicomDir    = strcat(scanDir,  'dicom', DS);
@@ -35,7 +36,10 @@ if ( processing )
     if ( ~success )
        throw(MException('PPS:DICOMConvert','Failed converting DICOMS to nifties. Error message was "%s".', error));
     end
+end
 
+if ( ~success )
+    return;
 end
 
 % %% Split up 4D-nifti into 3D-nifti files containing a single volume if non-existent
@@ -46,6 +50,8 @@ meanPath = strcat(niftiDir, 'mean.nii');
 stdPath  = strcat(niftiDir, 'std.nii');
 snrPath  = strcat(niftiDir, 'snr.nii');
 
-create_mean_volume(nifti4dPath, meanPath)
-create_std_volume(nifti4dPath,  stdPath)
-create_snr_volume(meanPath,     stdPath, snrPath)
+success  = success && create_mean_volume(nifti4dPath, meanPath);
+success  = success && create_std_volume(nifti4dPath,  stdPath);
+success  = success && create_snr_volume(meanPath,     stdPath, snrPath);
+
+end

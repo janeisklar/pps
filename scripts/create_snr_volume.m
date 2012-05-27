@@ -1,4 +1,4 @@
-function [ ] = create_snr_volume( meanPath, stdPath, snrPath )
+function [ status ] = create_snr_volume( meanPath, stdPath, snrPath )
 %Creates a single-to-noise nifti from the mean and std volume
 
 %% Check if snr already exists and is recent
@@ -16,6 +16,7 @@ end
 
 %% Create snr volume
 [s, r]  = unix(sprintf('FSLOUTPUTTYPE=NIFTI /usr/local/fsl/bin/fslmaths "%s" -div "%s" "%s"', meanPath, stdPath, snrPath));
+status  = s==0;
 
 if (s > 0)
    throw(MException('PPS:FSLError','Failed to create snr volume from mean and std nifti file(%s, %s). Output was "%s".', meanPath, stdPath, r)); 
