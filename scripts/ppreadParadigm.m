@@ -1,22 +1,27 @@
-function [ output_args ] = ppReadParadigm(dir)
+function [ output_args ] = ppReadParadigm(path)
+%clc;
+path='paradigms.txt';
 
 %.txt to String
-txt='epi_rft swa 95 65epi_bart swa 270 190epi_edt swa 245 170epi_emp swa 260 180epi_mr_r1 swa 213 150epi_mr_r2 swa 213 150epi_sst_r1 swa 190 135epi_sst_r2 swa 190 135epi_rs swa 258 180epi_attract_other swa 279 200epi_attract_self swa 279 200t1_mpr_sag_07mm_optimised - 1 25';
+txt = textread(path, '%s','delimiter', '\n');
 
-parameters=regexpi(txt, 'epi_edt (?<type>[a-z]*) (?<amount>[\d]*)', 'names');
-type=parameters.type;
-amount=parameters.amount;
 
-if type(1:1)=='-'
+for i=1:length(txt)
     
-else
-   %search (type,'vols.nii');
-   %if search==0
-       % do /scripts/(type, '.m')
-       %write file: ('missing .nii for',type, '...processing') 
-            %if search (type, '.m') ==0
-                %%write file: ('missing .m for',type, ' processing cancelled')
-             %end
-   %end
+    tmpStr=txt{i};
+    search=regexpi(tmpStr,'(?<link>[\w]*)\s(?<preproc>[\w|\D]*)\s(?<volumes>[\d]*)\s(?<size>[\d]*)', 'names');
+    
+    ppSearchLink(search.link, search.preproc, search.volumes, search.size);
+    
 end
 
+
+% if parameters.type(1:1)~='-'
+%     
+%     %ppNiftiCheck(dir, parameters.type)
+%     
+% end
+
+%ppDicomCheck(parameters.amount)
+
+%parameters=regexpi(txt, '\A(?<link>\w*) (?<procedure>\w*) (?<amount>\d*) (?<size>\d*)', 'names');
