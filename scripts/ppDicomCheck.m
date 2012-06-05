@@ -1,9 +1,10 @@
-function [ output_args ] = ppDicomCheck(amount)
+function [ output_args ] = ppDicomCheck(path,volumes,size)
 
-
-%%%DIR%%%
+cd(path);
 content=dir('*.IMA');
-if length(content) ~= amount
-    calc=amount-length(content);
+
+if length(content) ~= volumes
+    calc=volumes-length(content)
     %write file: ('Warning: ', 'calc,' DICOM files missing');
 end
+

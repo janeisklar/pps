@@ -2,6 +2,7 @@ function [ count, returnList ] = get_files_using_pattern( path, pattern )
 %Returns the list of files of the given directory after filtering them
 %using a regular expression
 
+
 count      = 0;
 returnList = {};
 
