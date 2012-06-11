@@ -1,10 +1,11 @@
-function [ output_args ] = 	ppSearchParadigm4(scanDir)
+function [ output_args ] = 	ppParadigm(scanDir)
 
-% +dicom
 dicomDir=strcat(scanDir,'\dicom');
-% [x,y]=get_files...
-[volumes,files]=get_files_using_pattern(dicomDir, '\.ima$');
+niftiDir=strcat(scanDir,'\nifti');
 
+%%%%CHECK%%%%
+%[volumes,files]=get_files_using_pattern(dicomDir, '\.ima$');
+volumes=1;
 if volumes<1
     % throw(MException('PPS:DICOMCheck','Failed to read information, DICOMs are missing');
     %% exit? return?
@@ -14,6 +15,7 @@ end
 
 %%%%%%%%REPLACE%%%%%%%%%%%%%
 filePath='E:\Uni\CognitiveScience\fMRI\pps12\subjects\ssh11_fc01\m1\dicom\CLU12-P020_7T.MR.PHYSIKER_RSLADKY.0005.0001.2012.03.28.12.32.30.734375.14886227.IMA';
+
 [info,header]=fileinfo(filePath);
 
 measurement= header.PatientName.GivenName;
@@ -38,7 +40,7 @@ else
     %throw(MException('PPS:DICOMCheck','Failed to read paradigm, paradigms.txt is missing');
 end
 
-[dicomVolumes,tarSize]=ppreadParadigm(paradigmPath,paradigm);
+[PPmode,dicomVolumes,tarSize]=ppReadParadigm(paradigmPath,paradigm);
 
 ppDicomCheck(dicomDir,dicomVolumes,tarSize)  
-
+ppNiftiCheck(niftiDir,PPmode)

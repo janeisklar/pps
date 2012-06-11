@@ -1,19 +1,22 @@
-function [ output_args ] = ppNiftiCheck(path,paraType)
+function [ output_args ] = ppNiftiCheck(path,PPmode)
 
-nii=strcat(paraType,'vols.nii');
-%vols.nii
+nii='vols.nii';
+modeNii=strcat(PPmode,'vols.nii');
 
-%%%DIR%%%
-result=dir(nii)
-result.name
-if result.name ~= nii
+cd(path);
+
+niiPara=dir(nii);
+modeNiiPara=dir(modeNii);
+
+
+if exist(nii) == 0 || niiPara.bytes == 0
     
-    %write file: ('missing ', parameters.type, 'vols.nii...processing');
-    type=str2func(parameters.type);
-    type();
-    exisM=exist(parameters.type, 'file');
+    %throw(MException('PPS:NIfTICheck','vols.nii is missing or is empty');
+    %write file: ('Warning: ',' vols.nii is missing');
+end
+
+if exist(modeNii) == 0 || modeNiiPara.bytes == 0
     
-    if exisM == 0
-       %write file: ('missing ', paraType, '.m...processing cancelled')
-    end
+    %throw(MException('PPS:NIfTICheck',PPmode,'vols.nii is missing or is empty');
+    %write file: ('Warning: ', PPmode,' vols.nii is missing');
 end
