@@ -21,7 +21,7 @@ try
     end
     
     %% Do the actual preprocessing
-    % TBD
+    ppParadigm(scanDir)
     
     %% Validate the processing steps
     pps_verify_scan(scanDir);

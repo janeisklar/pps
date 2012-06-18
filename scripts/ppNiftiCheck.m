@@ -1,9 +1,11 @@
 function [ output_args ] = ppNiftiCheck(path,PPmode)
 
-nii='vols.nii';
-modeNii=strcat(PPmode,'vols.nii');
 
-cd(path);
+nii=strcat(path,'vols.nii');
+modeNii=strcat(path,PPmode,'vols.nii');
+
+
+
 
 niiPara=dir(nii);
 modeNiiPara=dir(modeNii);

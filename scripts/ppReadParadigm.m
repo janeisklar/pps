@@ -11,17 +11,16 @@ for i=1:length(txt)
     tmpStr=txt{i};
     parameters=regexpi(tmpStr,'(?<link>[\w]*)\s(?<preproc>[\w|\D]*)\s(?<volumes>[\d]*)\s(?<size>[\d]*)', 'names');
     
-%     if parameters.link || parameters.preproc || parameters.volumes || parameters.size == ''
-%         x='here'
-%          %throw(MException('PPS:DICOMCheck','couldnt find Paradigm in .txt');
-%     end
+    if strcmp(parameters.link,'') || strcmp(parameters.preproc,'')|| strcmp(parameters.volumes,'')|| strcmp(parameters.size,'')
+        x='here'
+         %throw(MException('PPS:DICOMCheck','couldnt find Paradigm in .txt');
+    end
    
     if parameters.link(1:1)==paradigm(1:1)
-        
         foundParadigm=true;
         preproc=parameters.preproc;
         volumes=parameters.volumes;
-        size=parameters.size;
+        size=str2num(parameters.size);
         %ppDicomCheck(parameters.volumes,parameters.size)  
         
     end
@@ -34,10 +33,6 @@ if foundParadigm==false
 end
 
 
-% if parameters.preproc(1:1)~='-'
-%     
-%     %ppNiftiCheck(dir, parameters.type)
-%     
-% end
+
 
 

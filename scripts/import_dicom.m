@@ -6,8 +6,8 @@ workingDir         = get_full_path(workingDir);
 DS                 = filesep(); 
 
 %% Read out basic information about the scan
-fileName           = lower(fileName);
 filePath           = strcat(workingDir,'transfer',DS,fileName);
+fileName           = lower(fileName);
 [info,header]      = fileinfo(filePath);
 subject            = lower(header.PatientName.FamilyName);
 measurement        = lower(header.PatientName.GivenName);
