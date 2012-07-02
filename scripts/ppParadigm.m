@@ -5,7 +5,6 @@ DS = filesep();
 dicomDir=strcat(scanDir,DS,'dicom',DS);
 niftiDir=strcat(scanDir,DS,'nifti',DS);
 
-%%%%CHECK%%%%
 [volumes,files]=get_files_using_pattern(dicomDir, '\.ima$');
 
 if volumes<1
@@ -16,18 +15,14 @@ end
 
 filePath=strcat(dicomDir,files{1});
 
-%%%%%%%%REPLACE%%%%%%%%%%%%%
-%filePath='E:\Uni\CognitiveScience\fMRI\pps12\subjects\ssh11_fc01\m1\dicom\CLU12-P020_7T.MR.PHYSIKER_RSLADKY.0005.0001.2012.03.28.12.32.30.734375.14886227.IMA';
-
 [info,header]=fileinfo(filePath);
 
 measurement= header.PatientName.GivenName;
 paradigm= header.ProtocolName;
 
-%%%%CHECK%%%%
-% if measurement || paradigm == 0
-%     %throw(MException('PPS:DICOMCheck','Failed to read DICOM header, a is missing');
-% end
+if measurement || paradigm == 0
+    throw(MException('PPS:DICOMCheck','Failed to read DICOM header, a is missing');
+end
 
 %% search paradigms_x
 
