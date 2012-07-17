@@ -1,5 +1,5 @@
 function [ preproc,volumes,size ] = ppReadParadigm(path,paradigm)
-
+%reads the content of paradigm.txt
 
 %.txt to String
 txt = textread(path, '%s','delimiter', '\n');
@@ -20,13 +20,14 @@ for i=1:length(txt)
         preproc=parameters.preproc;
         volumes=parameters.volumes;
         size=str2num(parameters.size);
-        %ppDicomCheck(parameters.volumes,parameters.size)  
+        
         
     end
     
     
 end
 
+%error if paradigm isn't listed in paradigm.txt
 if foundParadigm==false
     throw(MException('PPS:DICOMCheck','couldnt find Paradigm in .txt');
 end

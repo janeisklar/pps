@@ -1,4 +1,5 @@
 function [ output_args ] = ppDicomCheck(path,txtVolumes,size)
+% Checks if any DICOM files are missing and verifies the size of archived 
 
 [volumes,files]=get_files_using_pattern(path, '\.ima$');
 

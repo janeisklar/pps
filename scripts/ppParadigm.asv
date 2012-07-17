@@ -1,5 +1,5 @@
 function [ output_args ] = 	ppParadigm(scanDir)
-% searches for (specific) paradigm.txt
+% searches for (specific) paradigm.txt and reads its content
 
 DS = filesep();
 dicomDir=strcat(scanDir,DS,'dicom',DS);
@@ -30,9 +30,8 @@ end
 
 specParadigm=strcat('paradigms_',measurement,'.txt');
 
-%search for the right paradigm.txt
 if exist(specParadigm)
-    
+    %writeProto: 'specified paradigm for' measurement
     paradigmPath=strcat(pwd,DS,specParadigm);
     
 elseif exist('paradigms.txt')
@@ -45,7 +44,6 @@ end
 
 ppDicomCheck(dicomDir,dicomVolumes,tarSize)
 
-% error if no preprocessing mode is specified in paradigm.txt
 if length(PPmode)<1
     
     throw(MException('PPS:DICOMCheck','Failed to read paradigm, mode is missing in paradigm.txt'));
