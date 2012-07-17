@@ -2,10 +2,19 @@ function [ ] = process_scan( scanDir )
 %Process a directory of a scan
 %   handles nifti-conversion and DICOM-archiving
 
+scanDir = get_full_path_trailing(scanDir);
 success = true;
 
 try
-
+    %% Check if processing is necessary
+    lockPath    = strcat(scanDir, 'ok.fmri');
+    
+    %% If processing lock doesn't exist start processing scan
+    if ( exist(lockPath, 'file') )
+      return;
+    end
+  
+  
     %% Check presence of niftis
     success = process_scan_niftis(scanDir);
     

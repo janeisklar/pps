@@ -3,7 +3,7 @@ function [ ] = process_all_scans( workingPath )
 %and insured that no further processing is required
 
 DS           = filesep();
-workingPath  = get_full_path(workingPath);
+workingPath  = get_full_path_trailing(workingPath);
 subjectsPath = strcat(workingPath, 'subjects', DS);
 
 %% Iterate over all folders in the subjects folder
@@ -12,31 +12,9 @@ subjects = get_directories(subjectsPath);
 for i=1:length(subjects)
     subject=subjects{i};
     
-    %% Within a subjects folder iterate over all measurements
+    %% Process subject
     subjectPath  = strcat(subjectsPath, subject, DS);
-    measurements = get_directories(subjectPath);
-    
-    for j=1:length(measurements)
-        measurement=measurements{j};
-        
-        %% Finally iterate over all scans in the current measurements folder
-        measurementPath = strcat(subjectPath, measurement, DS);
-        scans           = get_directories(measurementPath);
-        
-        for k=1:length(scans)
-            scan=scans{k};
-            
-            %% Check if processing is necessary
-            scanPath    = strcat(measurementPath, scan, DS);
-            lockPath    = strcat(scanPath, 'ok.fmri');
-            
-            %% If processing lock doesn't exist start processing scan
-            if ( ~exist(lockPath, 'file') )
-                process_scan(scanPath);
-            end
-
-        end
-    end
+    ppProcessSubject(subjectPath);
 end
 
 end
