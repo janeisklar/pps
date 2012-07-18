@@ -5,7 +5,7 @@ DS = filesep();
 dicomDir=strcat(scanDir,DS,'dicom',DS);
 niftiDir=strcat(scanDir,DS,'nifti',DS);
 
-[volumes,files]=get_files_using_pattern(dicomDir, '\.ima$');
+[volumes,files]=ppGetFilesUsingPattern(dicomDir, '\.ima$');
 
 %error in case folder does not contain a DICOM file
 if volumes<1
@@ -16,7 +16,7 @@ end
 
 filePath=strcat(dicomDir,files{1});
 
-[info,header]=fileinfo(filePath);
+[info,header]=ppFileinfo(filePath);
 
 measurement= header.PatientName.GivenName;
 paradigm= header.ProtocolName;

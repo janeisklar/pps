@@ -49,7 +49,7 @@ elseif (strcmp(mode,'subjects'))
     if subDirLevel == 0
       
       % Preprocessing for the whole subjects dir
-      process_all_scans(workingDir);
+      ppProcessAllScans(workingDir);
       
     elseif subDirLevel == 1
       
@@ -64,7 +64,7 @@ elseif (strcmp(mode,'subjects'))
     elseif subDirLevel == 3
       
       % Preprocessing for a single scan
-      process_scan(path);
+      ppProcessScan(path);
       
     else
       throw(MException('PPS:invalidPath','Source path in the subjects directory can point to either the subjects dir itself, a single subject''s dir, a measurement''s dir or the dir of a single scan. Single DICOMs/Niftis cannot be processed individually!'));
@@ -73,15 +73,15 @@ elseif (strcmp(mode,'subjects'))
     return
 elseif (strcmp(mode,'transfer'))
     %% Transfer files and preprocess
-    [unused,importFiles] = get_files_using_pattern(inputDir, '\.ima$');
+    [unused,importFiles] = ppGetFilesUsingPattern(inputDir, '\.ima$');
     
     for i=1:length(importFiles)
         file=importFiles{i};
-        import_dicom(workingDir,file);
+        ppImportDicom(workingDir,file);
     end
     
     %% Convert files and do some basic processing
-    process_all_scans(workingDir);
+    ppProcessAllScans(workingDir);
 else
     throw(MException('PPS:invalidPath','Source Directory must be either "subject" or "transfer"'));
 end

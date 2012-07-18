@@ -2,10 +2,10 @@ function [ ] = ppProcessMeasurementsAtDate( datePath )
 %All scans in the measurements sub-folder for a specific are being processed
 
 DS        = filesep();
-datePath  = get_full_path_trailing(datePath);
+datePath  = ppGetFullPathTrailing(datePath);
 
 %% Iterate over all folders in the measurement date's folder
-subjects  = get_directories(datePath);
+subjects  = ppGetDirectories(datePath);
 
 for i=1:length(subjects)
     subject=subjects{i};

@@ -2,16 +2,16 @@ function [ ] = ppProcessMeasurement( measurementPath )
 %All scans in the measurement's folder are being processed
 
 DS               = filesep();
-measurementPath  = get_full_path_trailing(measurementPath);
+measurementPath  = ppGetFullPathTrailing(measurementPath);
 
 %% Iterate over all scans in the current measurement's folder
-scans           = get_directories(measurementPath);
+scans           = ppGetDirectories(measurementPath);
 
 for k=1:length(scans)
     scan        =scans{k};
     scanPath    = strcat(measurementPath, scan, DS);
     
-    process_scan(scanPath);
+    ppProcessScan(scanPath);
 end
 
 end

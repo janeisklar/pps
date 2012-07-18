@@ -2,10 +2,10 @@ function [ ] = ppProcessSubject( subjectPath )
 %All scans in the current subject's folder are being processed
 
 DS           = filesep();
-subjectPath  = get_full_path_trailing(subjectPath);
+subjectPath  = ppGetFullPathTrailing(subjectPath);
 
 %% Within a subject's folder iterate over all measurements
-measurements = get_directories(subjectPath);
+measurements = ppGetDirectories(subjectPath);
 
 for j=1:length(measurements)
     measurement=measurements{j};

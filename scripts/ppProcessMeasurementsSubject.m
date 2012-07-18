@@ -2,10 +2,10 @@ function [ ] = ppProcessMeasurementsSubject( subjectPath )
 %All scans in the current subject's folder are being processed
 
 DS           = filesep();
-subjectPath  = get_full_path_trailing(subjectPath);
+subjectPath  = ppGetFullPathTrailing(subjectPath);
 
 %% Within a subject's folder iterate over all links to scans
-scans = get_symlinks(subjectPath);
+scans = ppGetSymlinks(subjectPath);
 
 %% Finally iterate over all scans in the subject folder
 for j=1:length(scans)
