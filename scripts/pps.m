@@ -7,7 +7,7 @@ function [ ] = pps( path )
 DS          = filesep();
 
 %% Extract path information
-exPath      = regexpi(path,'(?<workingDir>.*)(?<mode>subjects|transfer)(?<subDir>.*)', 'names');
+exPath      = regexpi(path,'(?<workingDir>.*)(?<mode>subjects|transfer|measurements)(?<subDir>.*)', 'names');
 workingDir  = exPath.workingDir;
 mode        = exPath.mode;
 inputDir    = strcat(workingDir,mode);
@@ -16,8 +16,35 @@ inputDir    = strcat(workingDir,mode);
 subDir      = exPath.subDir;
 subDirLevel = sum(not(cellfun(@isempty, regexp(subDir, DS, 'split'))));
 
-if (strcmp(mode,'subjects'))
-    %% Preprosessing only
+if (strcmp(mode, 'measurements'))
+    %% Preprocessing only
+    
+    if subDirLevel == 0
+      
+      % Preprocessing for the whole measurements directory
+      ppProcessAllMeasurements(workingDir);
+      
+    elseif subDirLevel == 1
+      
+      % Preprocessing for a single measurement date
+      ppProcessMeasurementsAtDate(path);
+      
+    elseif subDirLevel == 2
+      
+      % Preprocessing for a single subject
+      ppProcessMeasurementsSubject(path);
+    
+    elseif subDirLevel == 3
+
+      % Preprocessing for a single scan
+      ppProcessMeasurementsScan(path);
+        
+    else
+      throw(MException('PPS:invalidPath','Source path in the subjects directory can point to either the subjects dir itself, a single subject''s dir, a measurement''s dir or the dir of a single scan. Single DICOMs/Niftis cannot be processed individually!'));
+    end
+    
+elseif (strcmp(mode,'subjects'))
+    %% Preprocessing only
     
     if subDirLevel == 0
       

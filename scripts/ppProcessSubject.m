@@ -1,7 +1,5 @@
 function [ ] = ppProcessSubject( subjectPath )
-%All scans in the current subject's folder are being
-%checked and insured that no further processing is 
-%required
+%All scans in the current subject's folder are being processed
 
 DS           = filesep();
 subjectPath  = get_full_path_trailing(subjectPath);

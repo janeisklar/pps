@@ -1,6 +1,5 @@
 function [ ] = process_all_scans( workingPath )
-%All scans in the subject folder are being checked
-%and insured that no further processing is required
+%All scans in the subject folder are being processed
 
 DS           = filesep();
 workingPath  = get_full_path_trailing(workingPath);

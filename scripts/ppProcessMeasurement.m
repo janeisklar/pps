@@ -1,7 +1,5 @@
 function [ ] = ppProcessMeasurement( measurementPath )
-%All scans in the measurement's folder are being 
-%checked and insured that no further processing is
-%required
+%All scans in the measurement's folder are being processed
 
 DS               = filesep();
 measurementPath  = get_full_path_trailing(measurementPath);
