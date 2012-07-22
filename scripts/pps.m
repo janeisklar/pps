@@ -73,17 +73,10 @@ elseif (strcmp(mode,'subjects'))
     return
 elseif (strcmp(mode,'transfer'))
     %% Transfer files and preprocess
-    [unused,importFiles] = ppGetFilesUsingPattern(inputDir, '\.ima$');
     
-    for i=1:length(importFiles)
-        file=importFiles{i};
-        ppImportDicom(workingDir,file);
-    end
-    
-    %% Convert files and do some basic processing
-    ppProcessAllScans(workingDir);
+    ppTransferFiles(workingDir, inputDir);
 else
-    throw(MException('PPS:invalidPath','Source Directory must be either "subject" or "transfer"'));
+    throw(MException('PPS:invalidPath','Source Directory must either be a subfolder of the "subject", "measurement" or "transfer" folder!'));
 end
 
 end
