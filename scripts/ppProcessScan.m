@@ -40,7 +40,8 @@ catch e
     %% In case of an error write error message to the designated error file
     errorPath   = strcat(scanDir, 'error.fmri');
     fid         = fopen(errorPath, 'w');
-    fwrite(fid, e.message);
+
+    fwrite(fid, sprintf('%s(%s:%d)', e.message, e.stack(1).name, e.stack(1).line));
     fclose(fid);
     
     success     = false;
