@@ -23,7 +23,7 @@ paradigm= header.ProtocolName;
 
 %error in case DICOM header is empty
 if measurement || paradigm == 0
-    throw(MException('PPS:DICOMCheck','Failed to read DICOM header, a is missing');
+    throw(MException('PPS:DICOMCheck','Failed to read DICOM header, a is missing'));
 end
 
 %% search paradigms_x
