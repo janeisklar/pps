@@ -1,32 +1,30 @@
-function [ output_args ] = ppDicomCheck(path,txtVolumes,size)
+function [ status ] = ppDicomCheck(path,txtVolumes,size)
 % Checks if any DICOM files are missing and verifies the size of
 % DICOM archive
 
-[volumes,files]=ppGetFilesUsingPattern(path, '\.ima$');
+status          = 0;
+[volumes,files] = ppGetFilesUsingPattern(path, '\.ima$');
 
-%error if DICOMs are missing
+%% Error if DICOMs are missing
 if volumes < txtVolumes
-    
-    calc=txtVolumes-volumes;
-    throw(MException('PPS:DICOMCheck','DICOMs are missing'));
-   
-    
+    throw(MException('PPS:DICOMCheck','DICOMs are missing(was: %d, expected: %d)', volumes, txtVolumes));
+    return
 end
 
 tarPath=strcat(path,'dicom.tar.gz');
 
-%error if DICOM archive is to small or missing
-if exist(tarPath)
-    tar=dir(tarPath);
-    
-    if size>tar.bytes/(1024^2)
-        
-        throw(MException('PPS:DICOMCheck','tar-file is too small'));
-        
-        
-    end
-    
-else
-    throw(MException('PPS:DICOMCheck','.tar is missing'));
-    
+%% Error if DICOM archive is missing
+if exist(tarPath) < 1
+  throw(MException('PPS:DICOMCheck','Dicom.tar.gz is missing!'));
+  return
 end
+
+tar             = dir(tarPath);
+
+%% Error if DICOM archive is too small
+if size>tar.bytes/(1024^2)
+  throw(MException('PPS:DICOMCheck','dicom.tar.gz tar-file is too small(was: %.2f MB, expected: >%d MB)', tar.bytes/(1024^2), size));
+  return
+end
+
+status          = 1;

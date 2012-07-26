@@ -35,6 +35,7 @@ if ( processing )
 
     if ( ~success )
        throw(MException('PPS:DICOMConvert','Failed converting DICOMS to nifties. Error message was "%s".', error));
+       return
     end
 end
 
@@ -50,8 +51,16 @@ meanPath = strcat(niftiDir, 'mean.nii');
 stdPath  = strcat(niftiDir, 'std.nii');
 snrPath  = strcat(niftiDir, 'snr.nii');
 
-success  = success && ppCreateMeanVolume(nifti4dPath, meanPath);
-success  = success && ppCreateStdVolume(nifti4dPath,  stdPath);
-success  = success && ppCreateSnrVolume(meanPath,     stdPath, snrPath);
+if ( exist(meanPath, 'file') < 1 )
+    success  = success && ppCreateMeanVolume(nifti4dPath, meanPath);
+end
+
+if ( exist(stdPath, 'file') < 1 )
+    success  = success && ppCreateStdVolume(nifti4dPath, stdPath);
+end
+
+if ( exist(snrPath, 'file') < 1 )
+    success  = success && ppCreateSnrVolume(meanPath, stdPath, snrPath);
+end
 
 end
