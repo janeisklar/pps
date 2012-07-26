@@ -1,4 +1,4 @@
-function [ ] = ppProcessMeasurementsScan( scanPath )
+function [ ] = ppProcessMeasurementsScan( workingDir, scanPath )
 %Process specified scan
 
 DS            = filesep();
@@ -12,6 +12,6 @@ realScanPath  = strcat(scanPath, '..', DS, relativeScanPath);
 realScanPath  = ppGetFullPathTrailing(realScanPath);
 
 %% Start the processing in the correct scan dir
-ppProcessScan(realScanPath);
+ppProcessScan(workingDir, realScanPath);
 
 end

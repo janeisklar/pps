@@ -1,4 +1,4 @@
-function [ ] = ppProcessMeasurementsAtDate( datePath )
+function [ ] = ppProcessMeasurementsAtDate( workingDir, datePath )
 %All scans in the measurements sub-folder for a specific are being processed
 
 DS        = filesep();
@@ -12,7 +12,7 @@ for i=1:length(subjects)
     
     %% Process subject
     subjectPath  = strcat(datePath, subject, DS);
-    ppProcessMeasurementsSubject(subjectPath);
+    ppProcessMeasurementsSubject(workingDir, subjectPath);
 end
 
 end

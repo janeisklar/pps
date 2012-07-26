@@ -13,7 +13,7 @@ for i=1:length(dates)
     
     %% Process subject
     measurementPath = strcat(measurementsPath, date, DS);
-    ppProcessMeasurementsAtDate(measurementPath);
+    ppProcessMeasurementsAtDate(workingDir, measurementPath);
 end
 
 end

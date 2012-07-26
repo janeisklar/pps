@@ -1,4 +1,4 @@
-function [ ] = ppProcessSubject( subjectPath )
+function [ ] = ppProcessSubject( workingDir, subjectPath )
 %All scans in the current subject's folder are being processed
 
 DS           = filesep();
@@ -12,7 +12,7 @@ for j=1:length(measurements)
     
     %% Finally iterate over all scans in the current measurements folder
     measurementPath = strcat(subjectPath, measurement, DS);
-    ppProcessMeasurement(measurementPath);
+    ppProcessMeasurement(workingDir, measurementPath);
 end
 
 end

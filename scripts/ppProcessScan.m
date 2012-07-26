@@ -1,4 +1,4 @@
-function [ ] = ppProcessScan( scanDir )
+function [ ] = ppProcessScan( workingDir, scanDir )
 %Process a directory of a scan
 %   handles nifti-conversion and DICOM-archiving
 
@@ -30,7 +30,7 @@ try
     end
     
     %% Do the actual preprocessing
-    ppParadigm(scanDir)
+    ppParadigm(workingDir, scanDir)
     
     %% Validate the processing steps
     ppVerifyScan(scanDir);

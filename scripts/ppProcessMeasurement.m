@@ -1,4 +1,4 @@
-function [ ] = ppProcessMeasurement( measurementPath )
+function [ ] = ppProcessMeasurement( workingDir, measurementPath )
 %All scans in the measurement's folder are being processed
 
 DS               = filesep();
@@ -11,7 +11,7 @@ for k=1:length(scans)
     scan        =scans{k};
     scanPath    = strcat(measurementPath, scan, DS);
     
-    ppProcessScan(scanPath);
+    ppProcessScan(workingDir, scanPath);
 end
 
 end

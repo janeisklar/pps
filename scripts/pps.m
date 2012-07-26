@@ -27,17 +27,17 @@ if (strcmp(mode, 'measurements'))
     elseif subDirLevel == 1
       
       % Preprocessing for a single measurement date
-      ppProcessMeasurementsAtDate(path);
+      ppProcessMeasurementsAtDate(workingDir, path);
       
     elseif subDirLevel == 2
       
       % Preprocessing for a single subject
-      ppProcessMeasurementsSubject(path);
+      ppProcessMeasurementsSubject(workingDir, path);
     
     elseif subDirLevel == 3
 
       % Preprocessing for a single scan
-      ppProcessMeasurementsScan(path);
+      ppProcessMeasurementsScan(workingDir, path);
         
     else
       throw(MException('PPS:invalidPath','Source path in the subjects directory can point to either the subjects dir itself, a single subject''s dir, a measurement''s dir or the dir of a single scan. Single DICOMs/Niftis cannot be processed individually!'));
@@ -54,17 +54,17 @@ elseif (strcmp(mode,'subjects'))
     elseif subDirLevel == 1
       
       % Preprocessing for a single subject
-      ppProcessSubject(path);
+      ppProcessSubject(workingDir, path);
       
     elseif subDirLevel == 2
       
       % Preprocessing for a single measurement
-      ppProcessMeasurement(path);
+      ppProcessMeasurement(workingDir, path);
       
     elseif subDirLevel == 3
       
       % Preprocessing for a single scan
-      ppProcessScan(path);
+      ppProcessScan(workingDir, path);
       
     else
       throw(MException('PPS:invalidPath','Source path in the subjects directory can point to either the subjects dir itself, a single subject''s dir, a measurement''s dir or the dir of a single scan. Single DICOMs/Niftis cannot be processed individually!'));

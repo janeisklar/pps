@@ -1,9 +1,9 @@
-function [ ] = ppProcessAllScans( workingPath )
+function [ ] = ppProcessAllScans( workingDir )
 %All scans in the subject folder are being processed
 
 DS           = filesep();
-workingPath  = ppGetFullPathTrailing(workingPath);
-subjectsPath = strcat(workingPath, 'subjects', DS);
+workingDir   = ppGetFullPathTrailing(workingDir);
+subjectsPath = strcat(workingDir, 'subjects', DS);
 
 %% Iterate over all folders in the subjects folder
 subjects = ppGetDirectories(subjectsPath);
@@ -13,7 +13,7 @@ for i=1:length(subjects)
     
     %% Process subject
     subjectPath  = strcat(subjectsPath, subject, DS);
-    ppProcessSubject(subjectPath);
+    ppProcessSubject(workingDir, subjectPath);
 end
 
 end
