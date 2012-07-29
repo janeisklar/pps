@@ -16,24 +16,24 @@ try
   
   
     %% Check presence of niftis
-    success = ppProcessScanNiftis(scanDir);
+    success = ppCreateNiftis(scanDir);
     
     if ( ~success )
         return;
     end
 
     %% Check presence of DICOM tar archive
-    ppProcessScanArchive(scanDir);
+    ppCreateDicomBackup(scanDir);
 
     if ( ~success )
         return;
     end
     
     %% Do the actual preprocessing
-    ppParadigm(workingDir, scanDir)
+    ppRunPreprocessingJob(workingDir, scanDir)
     
     %% Validate the processing steps
-    ppVerifyScan(scanDir);
+    ppVerifyScan(workingDir, scanDir);
 
 catch e
     

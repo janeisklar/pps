@@ -1,4 +1,4 @@
-function [ success ] = ppProcessScanNiftis( scanDir )
+function [ success ] = ppCreateNiftis( scanDir )
 %Checks if all the nifti files are present and creates missing files
 
 success     = true;

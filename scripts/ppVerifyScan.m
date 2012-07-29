@@ -1,4 +1,4 @@
-function [ ] = ppVerifyScan( scanDir )
+function [ ] = ppVerifyScan( workingDir, scanDir )
 %UNTITLED5 Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -69,7 +69,20 @@ end
 
 %-----------------------------------------------------------------------------------------------------------
 
+%% Check if the data fulfills the requirements of the paradigm
+[paradigm, paradigmPath]      = ppFindParadigm(workingDir, scanDir)
+[PPmode,dicomVolumes,tarSize] = ppReadParadigm(paradigmPath, paradigm);
 
+ppCheckParadigmDicom(dicomDir,dicomVolumes,tarSize);
+
+%-----------------------------------------------------------------------------------------------------------
+
+%% Check if all requirements to run the preprocessing job were fulfilled
+if ( PPmode(1:1) ~= '-' )
+    ppCheckParadigmNifti(workingDir, niftiDir, PPmode, 1);
+end
+
+%-----------------------------------------------------------------------------------------------------------
 
 end
 

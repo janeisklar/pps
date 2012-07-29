@@ -1,4 +1,4 @@
-function [ status ] = ppDicomCheck(path,txtVolumes,size)
+function [ status ] = ppCheckParadigmDicom(path,txtVolumes,size)
 % Checks if any DICOM files are missing and verifies the size of
 % DICOM archive
 

@@ -1,4 +1,4 @@
-function ppProcessScanArchive( scanDir )
+function ppCreateDicomBackup( scanDir )
 %Checks the presence of a valid DICOM archive or creates it otherwise
 
 %% Prepare
