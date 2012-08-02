@@ -6,7 +6,7 @@ DS                = filesep();
 dicomDir          = strcat(scanDir,DS,'dicom',DS);
 niftiDir          = strcat(scanDir,DS,'nifti',DS);
 
-[paradigm, paradigmPath] = ppFindParadigm(workingDir, scanDir)
+[paradigm, paradigmPath] = ppFindParadigm(workingDir, scanDir);
 
 %% Read out the information contained in the paradigms.txt
 [PPmode,dicomVolumes,tarSize] = ppReadParadigm(paradigmPath,paradigm);
