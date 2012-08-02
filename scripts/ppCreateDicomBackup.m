@@ -22,9 +22,10 @@ if ( exist(archivePath, 'file') > 0 )
         return
     end
     
-    %% Otherwise the archive needs to be deleted prior to further processing
-    delete(archivePath);
+    throw(MException('PPS:CreateDicomBackup','Dicom archive(%s) is already present and contains fewer files(%d < %d) than present in the dicom folder. Fix and restart the preprocessing.', archivePath, nFiles, nDicoms));
 end
 
 %% Create tar archive of all DICOM files
 tar(archivePath, dicomList, dicomDir);
+
+%% TODO: Upload backup to remote server
