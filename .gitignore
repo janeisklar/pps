@@ -9,6 +9,9 @@ transfer*/*
 measurements/*
 !measurements/.gitignore
 
+conflicts/*
+!conflicts/.gitignore
+
 # OS generated files #
 ######################
 .DS_Store*

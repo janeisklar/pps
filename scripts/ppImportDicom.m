@@ -84,6 +84,34 @@ if ( createParadigmLink )
     end
 end
 
+%% Ensure that to-be-imported DICOM does not exist already
+[isUnique, conflictingFile] = ppIsDicomUnique(filePath, dicomDir);
+
+if ( isUnique == 0 )
+    conflictPath            = strcat(workingDir, 'conflicts');
+    conflictedDicomPath     = strcat(conflictPath, DS, fileName);
+    [status, mess, messid]  = movefile(filePath, conflictedDicomPath);
+    
+    % log conflict
+    conflictLogFile         = strcat(workingDir, 'conflicts', DS, 'conflicts.fmri');
+    conflictHandle          = fopen(conflictLogFile,'a');
+    fprintf( ...
+        conflictHandle, ...
+        '[%s] When comparing the dicom headers it has been found that the file ''%s'' had the same meta-informations as the already-imported file ''%s''. It has therefore been skipped and moved to the conflicts directory. Please resolve the conflicted file ''%s''.\n', ...
+        datestr(now()), ...
+        filePath, ...
+        conflictingFile, ...
+        conflictedDicomPath ...
+    );
+    fclose(conflictHandle);
+    
+    if ( status == 0 )
+        throw(MException('PPS:IOError','Error while moving conflicted DICOM "%s" from transfer to conflicts folder. Error message was "%s".', fileName, mess));
+    end
+    
+    return
+end
+
 %% Move DICOM to the subject directory
 dicomPath               = strcat(dicomDir, fileName);
 [status, mess, messid]  = movefile(filePath, dicomPath);
