@@ -9,7 +9,7 @@ conflictingFile        = '';
 %% Get the needle's unique identifier
 needleId               = ppGetUniqueDicomIdentifier(needlePath);
 
-%% Iterate over all haystack files and compare to the needle
+%% Iterate over all haystack files and compare them to the needle
 [unused,haystackFiles] = ppGetFilesUsingPattern(haystackPath, '\.ima$');
 
 for i=1:length(haystackFiles)

@@ -15,7 +15,7 @@ end
 fileList   = textscan(fileList,'%s','EndOfLine');
 fileList   = fileList{1};
 
-%% Keep files matching pattern
+%% Keep files not matching the given pattern
 for i=1:length(fileList)
     file = fileList{i};
 
