@@ -3,6 +3,10 @@ function [ returnList ] = ppGetDirectories( path )
 
 returnList = {};
 
+if ( exist(path) < 1 )
+    throw(MException('PPS:IOException','Directory "%s" doesn''t exist!', path)); 
+end
+
 dirList    = ls(path);
 
 if (strcmp(dirList, ''))

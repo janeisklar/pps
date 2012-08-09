@@ -70,7 +70,7 @@ end
 %-----------------------------------------------------------------------------------------------------------
 
 %% Check if the data fulfills the requirements of the paradigm
-[paradigm, paradigmPath]      = ppFindParadigm(workingDir, scanDir)
+[paradigm, paradigmPath]      = ppFindParadigm(workingDir, scanDir);
 [PPmode,dicomVolumes,tarSize] = ppReadParadigm(paradigmPath, paradigm);
 
 ppCheckParadigmDicom(dicomDir,dicomVolumes,tarSize);

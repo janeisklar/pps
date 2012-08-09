@@ -10,6 +10,7 @@ filePath           = strcat(workingDir,'transfer',DS,fileName);
 fileName           = lower(fileName);
 [info,header]      = ppFileinfo(filePath);
 subject            = lower(header.PatientName.FamilyName);
+subjectFull        = lower(strcat(header.PatientName.FamilyName, '_', header.PatientName.GivenName));
 measurement        = lower(header.PatientName.GivenName);
 scanRun            = header.SeriesNumber;
 scanId             = strcat('scan_', sprintf('%04d', scanRun));
@@ -26,9 +27,9 @@ niftiDir           = strcat(scanDir,           'nifti',            DS);
 
 measurementsDir    = strcat(workingDir,        'measurements',     DS);
 measurementDateDir = strcat(measurementsDir,   scanDate,           DS);
-measurementLinkDir = strcat(measurementDateDir,subject,            DS);
+measurementLinkDir = strcat(measurementDateDir,subjectFull,        DS);
 
-dirs = {subjectsDir subjectDir measurementDir scanDir dicomDir niftiDir measurementsDir measurementDateDir measurementLinkDir};
+dirs = {subjectsDir subjectDir measurementDir scanDir dicomDir niftiDir measurementsDir measurementDateDir};
 
 %% Check if folders already exist or create them otherwise
 for dir=dirs
@@ -47,9 +48,8 @@ for dir=dirs
 end
 
 %% Create symbolic links from measurements dir to the scans if not already existent
-
-measurementLink    = strcat(measurementLinkDir,   scanId);
-scanTarget         = strcat('..', DS, '..', DS, '..', DS, 'subjects', DS, subject, DS, measurement, DS, scanId);
+measurementLink    = strcat(measurementDateDir, subjectFull);
+scanTarget         = strcat('..', DS, '..', DS, 'subjects', DS, subject, DS, measurement);
 
 if ( ~ppIsSymlink(measurementLink) )
     status = ppCreateSymlink(scanTarget, measurementLink);

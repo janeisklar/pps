@@ -28,7 +28,7 @@ end
 
 %% Prepare the inputs for the job
 niftiFilePath   = strcat(niftiDir,'vols.nii');
-nSlices         = ppGetVolumeCountNifti4d(niftiFilePath);
+nVolumes         = ppGetVolumeCountNifti4d(niftiFilePath);
 
 job             = strcat(PPmode,'_job.m');
 jobFilePath     = strcat(workingDir, 'jobs', DS, job);
@@ -37,13 +37,13 @@ jobFile         = {jobFilePath};
 jobs            = repmat(jobFile, 1, 1);
 
 inputs          = cell(1,1);
-slices          = {};
+volumes          = {};
 
-for s = 1:nSlices
-    slices{s}   = sprintf('%s,%d', niftiFilePath, s);
+for s = 1:nVolumes
+    volumes{s}   = sprintf('%s,%d', niftiFilePath, s);
 end
 
-inputs{1,1} = slices';
+inputs{1,1} = volumes';
 
 %% Run the actual job file
 spm('defaults', 'FMRI');
