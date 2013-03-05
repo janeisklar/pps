@@ -1,4 +1,4 @@
-function [ info ] = ppImportDicom(workingDir,fileName)
+function [ info ] = ppImportDicom(workingDir,transferDir,fileName)
 %Imports a DICOM to the subject folder and creates the appropriate
 %folders and links
 
@@ -6,15 +6,14 @@ workingDir         = ppGetFullPath(workingDir);
 DS                 = filesep(); 
 
 %% Read out basic information about the scan
-filePath           = strcat(workingDir,'transfer',DS,fileName);
+filePath           = strcat(transferDir,DS,fileName);
 fileName           = lower(fileName);
 [info,header]      = ppFileinfo(filePath);
 subject            = lower(header.PatientName.FamilyName);
-subjectFull        = lower(strcat(header.PatientName.FamilyName, '_', header.PatientName.GivenName));
 measurement        = lower(header.PatientName.GivenName);
 scanRun            = header.SeriesNumber;
 scanId             = strcat('scan_', sprintf('%04d', scanRun));
-paradigm           = lower(header.ProtocolName);
+paradigm           = lower(header.SeriesDescription);
 scanDate           = datestr(datenum(header.AcquisitionDate, 'yyyymmdd'), 'yyyy-mm-dd');
 
 %% Gather paths to required folders
@@ -27,9 +26,9 @@ niftiDir           = strcat(scanDir,           'nifti',            DS);
 
 measurementsDir    = strcat(workingDir,        'measurements',     DS);
 measurementDateDir = strcat(measurementsDir,   scanDate,           DS);
-measurementLinkDir = strcat(measurementDateDir,subjectFull,        DS);
+measurementLinkDir = strcat(measurementDateDir,subject,            DS);
 
-dirs = {subjectsDir subjectDir measurementDir scanDir dicomDir niftiDir measurementsDir measurementDateDir};
+dirs = {subjectsDir subjectDir measurementDir scanDir dicomDir niftiDir measurementsDir measurementDateDir measurementLinkDir};
 
 %% Check if folders already exist or create them otherwise
 for dir=dirs
@@ -48,8 +47,9 @@ for dir=dirs
 end
 
 %% Create symbolic links from measurements dir to the scans if not already existent
-measurementLink    = strcat(measurementDateDir, subjectFull);
-scanTarget         = strcat('..', DS, '..', DS, 'subjects', DS, subject, DS, measurement);
+
+measurementLink    = strcat(measurementLinkDir,   scanId);
+scanTarget         = strcat('..', DS, '..', DS, '..', DS, 'subjects', DS, subject, DS, measurement, DS, scanId);
 
 if ( ~ppIsSymlink(measurementLink) )
     status = ppCreateSymlink(scanTarget, measurementLink);
@@ -84,39 +84,10 @@ if ( createParadigmLink )
     end
 end
 
-%% Ensure that to-be-imported DICOM does not exist already
-[isUnique, conflictingFile] = ppIsDicomUnique(filePath, dicomDir);
-
-if ( isUnique == 0 )
-    conflictPath            = strcat(workingDir, 'conflicts');
-    conflictedDicomPath     = strcat(conflictPath, DS, fileName);
-    [status, mess, messid]  = movefile(filePath, conflictedDicomPath);
-    
-    % log conflict
-    conflictLogFile         = strcat(workingDir, 'conflicts', DS, 'conflicts.fmri');
-    errorHandle             = 2;
-    conflictHandle          = fopen(conflictLogFile,'a');
-    conflictError           = sprintf( ...
-        '[%s] When comparing the dicom headers it has been found that the file ''%s'' had the same meta-informations as the already-imported file ''%s''. It has therefore been skipped and moved to the conflicts directory. Please resolve the conflicted file ''%s''.\n', ...
-        datestr(now()), ...
-        filePath, ...
-        conflictingFile, ...
-        conflictedDicomPath ...
-    );
-    fprintf(conflictHandle, conflictError);
-    fprintf(errorHandle,    conflictError);
-    fclose(conflictHandle);
-    
-    if ( status == 0 )
-        throw(MException('PPS:IOError','Error while moving conflicted DICOM "%s" from transfer to conflicts folder. Error message was "%s".', fileName, mess));
-    end
-    
-    return
-end
-
 %% Move DICOM to the subject directory
 dicomPath               = strcat(dicomDir, fileName);
 [status, mess, messid]  = movefile(filePath, dicomPath);
+
 
 if ( status == 0 )
     throw(MException('PPS:IOError','Failed in moving DICOM "%s" from transfer to subject folder. Error message was "%s".', fileName, mess));

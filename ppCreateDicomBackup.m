@@ -21,8 +21,8 @@ if ( exist(archivePath, 'file') > 0 )
     if ( nFiles >= nDicoms )
         return
     end
-    
-    throw(MException('PPS:CreateDicomBackup','Dicom archive(%s) is already present and contains fewer files(%d < %d) than present in the dicom folder. Fix and restart the preprocessing.', archivePath, nFiles, nDicoms));
+
+    throw(MException('PPS:CreateDicomBackup','Dicom archive(%s) is already present and contains fewer files(%d vs %d) than present in the dicom folder. Fix and restart the preprocessing.', archivePath, nFiles, nDicoms));
 end
 
 %% Create tar archive of all DICOM files

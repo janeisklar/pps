@@ -12,6 +12,9 @@ nifti4dPath = strcat(niftiDir, 'vols.nii');
 archiveName = 'dicom.tar.gz';
 archivePath = strcat(dicomDir, archiveName);
 
+[paradigm, paradigmPath]      = ppFindParadigm(workingDir, scanDir);
+[PPmode,dicomVolumes,tarSize] = ppReadParadigm(paradigmPath, paradigm);
+
 %% Check if 4D-nifti exists
 if ( exist(nifti4dPath, 'file') == 0 )
     throw(MException('PPS:VerificationError','4d-nifti missing: "%s".', nifti4dPath)); 
@@ -25,8 +28,8 @@ end
     
 % Determine the number of volumes in the 4D-nifti
 nVolumes = ppGetVolumeCountNifti4d(nifti4dPath);
-    
-if (nVolumes < nDicoms)
+
+if (nVolumes < str2num(dicomVolumes) )
     throw(MException('PPS:VerificationError','4d-nifti contains too few volumes: "%s".', nifti4dPath)); 
 end
 
@@ -41,12 +44,14 @@ end
 
 %% Check if DICOM archive is valid
 % Get number of files in the archive
-nFiles      = ppGetTarFileCount(archivePath);
 
-% Compare the number of files in the archive with those in the DICOM folder
-if ( nFiles < nDicoms )
-    throw(MException('PPS:VerificationError','DICOM-archive contains too few DICOMs: "%s".', archivePath));
-end
+%rsl deactivated feature
+% nFiles      = ppGetTarFileCount(archivePath);
+% 
+% % Compare the number of files in the archive with those in the DICOM folder
+% if ( nFiles < nDicoms )
+%     throw(MException('PPS:VerificationError','DICOM-archive contains too few DICOMs: "%s".', archivePath));
+% end
 
 %-----------------------------------------------------------------------------------------------------------
 
@@ -70,8 +75,7 @@ end
 %-----------------------------------------------------------------------------------------------------------
 
 %% Check if the data fulfills the requirements of the paradigm
-[paradigm, paradigmPath]      = ppFindParadigm(workingDir, scanDir);
-[PPmode,dicomVolumes,tarSize] = ppReadParadigm(paradigmPath, paradigm);
+
 
 ppCheckParadigmDicom(dicomDir,dicomVolumes,tarSize);
 

@@ -1,6 +1,5 @@
 function [ preproc,volumes,size ] = ppReadParadigm(path,paradigm)
 %reads the content of paradigm.txt
-
 %.txt to String
 txt           = textread(path, '%s','delimiter', '\n');
 foundParadigm = false;
@@ -9,13 +8,12 @@ foundParadigm = false;
 for i=1:length(txt)
     
     tmpStr     = txt{i};
-    parameters = regexpi(tmpStr,'(?<link>[\w]*)\s(?<preproc>[\w|\D]*)\s(?<volumes>[\d]*)\s(?<size>[\d]*)', 'names');
-    
-    if ( strcmp(parameters.link,'') || strcmp(parameters.preproc,'') || strcmp(parameters.volumes,'') || strcmp(parameters.size,'') )
+    parameters = regexpi(tmpStr,'(?<link>[A-za-z-_0-9]*)\s(?<preproc>[A-za-z-_0-9]*)\s(?<volumes>[\d]*)\s(?<size>[\d]*)', 'names');
+    if ( strcmpi(parameters.link,'') || strcmpi(parameters.preproc,'') || strcmpi(parameters.volumes,'') || strcmpi(parameters.size,'') )
          throw(MException('PPS:DICOMCheck','couldnt find Paradigm in .txt'));
     end
-   
-    if ( parameters.link(1:1)==paradigm(1:1) )
+    %rsl if ( parameters.link(1:1)==paradigm(1:1) )
+    if strcmpi( parameters.link, paradigm )
         foundParadigm = true;
         preproc       = parameters.preproc;
         volumes       = parameters.volumes;

@@ -62,7 +62,6 @@ elseif (strcmp(mode,'subjects'))
       ppProcessMeasurement(workingDir, path);
       
     elseif subDirLevel == 3
-      
       % Preprocessing for a single scan
       ppProcessScan(workingDir, path);
       
@@ -71,10 +70,12 @@ elseif (strcmp(mode,'subjects'))
     end
     
     return
-elseif (strcmp(mode,'transfer'))
+elseif (strfind(mode,'transfer'))
     %% Transfer files and preprocess
+    %% rsl: strfind instead strcmp to allow for variations of transfer
+    %%      folder name
     
-    ppTransferFiles(workingDir, inputDir);
+    ppTransferFiles(workingDir, path);
 else
     throw(MException('PPS:invalidPath','Source Directory must either be a subfolder of the "subject", "measurement" or "transfer" folder!'));
 end

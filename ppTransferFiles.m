@@ -23,10 +23,10 @@ end
 
 for i=1:length(importFiles)
     file=importFiles{i};
-    ppImportDicom(workingDir,file);
+    ppImportDicom(workingDir,transferDir,file);
 end
 
 %% Convert files and do some basic processing
-ppProcessAllScans(workingDir);
+%rsl deactivated for bulk import ppProcessAllScans(workingDir);
 
 end

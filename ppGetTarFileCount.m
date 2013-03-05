@@ -11,6 +11,9 @@ end
 %% Use the shell tar utility to list the files in the archive and count them
 [unused, r]  = unix(sprintf('tar tf "%s" | grep -i .ima | wc -l', tarPath));
 count        = str2num(strtrim(r));
+if isempty( count )
+    count = 0;
+end
 
 end
 

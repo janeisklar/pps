@@ -17,7 +17,7 @@ filePath          = strcat(dicomDir,files{1});
 [info,header]     = ppFileinfo(filePath);
 
 measurement       = header.PatientName.GivenName;
-paradigm          = header.ProtocolName;
+paradigm          = header.SeriesDescription;
 
 %% Error in case DICOM header is empty
 if ( isempty(measurement) || isempty(paradigm) )
@@ -34,7 +34,7 @@ if ( exist(specParadigmPath) > 0 )
 end
 
 if ( exist(paradigmPath) < 1 )
-    throw(MException('PPS:DICOMCheck','Failed to read paradigm, paradigms.txt is missing'));
+    throw(MException('PPS:DICOMCheck',['Failed to read paradigm, ' paradigmPath ' and '  specParadigmPath ' are missing']));
     return
 end
 

@@ -3,13 +3,14 @@ function [ ] = ppProcessScan( workingDir, scanDir )
 %   handles nifti-conversion and DICOM-archiving
 
 scanDir     = ppGetFullPathTrailing(scanDir);
-errorPath   = strcat(scanDir, 'error.fmri');
+errorPath   = strcat(scanDir, 'ERROR.fmri');
 success     = true;
 
 try
     %% Check if processing is necessary
-    lockPath    = strcat(scanDir, 'ok.fmri');
+    lockPath    = strcat(scanDir, 'OKAY.fmri');
     
+
     %% If processing lock doesn't exist start processing scan
     if ( exist(lockPath, 'file') )
       return;
@@ -20,7 +21,10 @@ try
       delete(errorPath);
     end
     
-  
+    % Check if scan is in paradigm list
+    [ paradigm, paradigmPath ] = ppFindParadigm(workingDir, scanDir);
+    ppReadParadigm(paradigmPath,paradigm);
+    
     %% Check presence of niftis
     success = ppCreateNiftis(scanDir);
     
@@ -36,31 +40,32 @@ try
     end
     
     %% Do the actual preprocessing
-    ppRunPreprocessingJob(workingDir, scanDir)
+    ppRunPreprocessingJob(workingDir, scanDir);
     
     %% Validate the processing steps
     ppVerifyScan(workingDir, scanDir);
 
 catch e
-    
-    %% In case of an error write error message to the designated error file
-    fid         = fopen(errorPath, 'w');
+    if isempty(strfind(e.message, 'couldnt find Paradigm in .txt')) %rsl 12-10-04 ignore this warning
 
-    fwrite(fid, sprintf('%s(%s:%d)', e.message, e.stack(1).name, e.stack(1).line));
-    fclose(fid);
+        %% In case of an error write error message to the designated error file
+        fid         = fopen(errorPath, 'w');
+        fwrite(fid, sprintf('%s(%s:%d)\n', e.message, e.stack(1).name, e.stack(1).line));
+        fclose(fid);
     
-    success     = false;
+        success     = false;
+    end
 end
 
 %% If we got till here without errors, mark this scan as processed
 if success
-    lockPath    = strcat(scanDir, 'ok.fmri');
+    lockPath    = strcat(scanDir, 'OKAY.fmri');
     fid         = fopen(lockPath, 'w');
     fwrite(fid, '');
     fclose(fid);
 end
 
 %% Either way, update findings.fmri to represent the new error count
-unix(sprintf('echo `find %s../ -name error.fmri -print |wc -l`" Errors, 0 Warnings" > %s../findings.fmri', scanDir, scanDir)); 
+unix(sprintf('echo `find %s../ -name ERROR.fmri -print |wc -l`" Errors, 0 Warnings" > %s../FINDINGS.fmri', scanDir, scanDir)); 
 
 end
