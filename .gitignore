@@ -1,16 +1,4 @@
-scripts/**/*.ps
-
-subjects/*
-!subjects/.gitignore
-
-transfer*/*
-!transfer/.gitignore
-
-measurements/*
-!measurements/.gitignore
-
-conflicts/*
-!conflicts/.gitignore
+*.m~
 
 # OS generated files #
 ######################
