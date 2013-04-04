@@ -1,4 +1,4 @@
-function [ ] = pps( path )
+function [ ] = pps(path)
 %Runs the pre-processing procedure, that is imports the dicoms and
 %preprocesses them. The path can either be the subject
 %directory(preprocessing only) or the transfer folder(import and

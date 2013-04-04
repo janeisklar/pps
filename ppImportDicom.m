@@ -7,7 +7,6 @@ DS                 = filesep();
 
 %% Read out basic information about the scan
 filePath           = strcat(transferDir,DS,fileName);
-fileName           = lower(fileName);
 [info,header]      = ppFileinfo(filePath);
 subject            = lower(header.PatientName.FamilyName);
 measurement        = lower(header.PatientName.GivenName);
@@ -84,13 +83,56 @@ if ( createParadigmLink )
     end
 end
 
+%% Get hashes for all dicoms that were already imported
+[hashes, hashFilePaths] = ppGetImportedDicomIdentifiers(dicomDir);
+
 %% Move DICOM to the subject directory
-dicomPath               = strcat(dicomDir, fileName);
-[status, mess, messid]  = movefile(filePath, dicomPath);
 
+fileNameParts           = regexpi(fileName, '(?<before>.*PHYSIKER[^\.]*\.\d*\.)(?<run>0*1)(?<end>\..*\.)(?<date>\d*\.\d*\.ima)$', 'names');
 
-if ( status == 0 )
-    throw(MException('PPS:IOError','Failed in moving DICOM "%s" from transfer to subject folder. Error message was "%s".', fileName, mess));
+filePattern             = strcat(fileNameParts.before, '\d*', fileNameParts.end, '.*\.ima$')
+[unused, importFiles]   = ppGetFilesUsingPattern(transferDir, filePattern)
+
+for i=1:length(importFiles)
+	file      = importFiles{i};
+	filePath  = strcat(transferDir,DS,file);
+	dicomPath = strcat(dicomDir, lower(file))
+	
+	hash      = ppGetUniqueDicomIdentifier(filePath);
+	hashIndex = ppInList(hash, hashes);
+	
+	if ( hashIndex > 0 )
+		conflictingFile = hashFilePaths{hashIndex};
+		conflictPath = strcat(workingDir, 'conflicts');
+		conflictedDicomPath = strcat(conflictPath, DS, file);
+    		[status, mess, messid] = movefile(filePath, conflictedDicomPath);
+    
+    		% log conflict
+    		conflictLogFile = strcat(workingDir, 'conflicts', DS, 'conflicts.fmri');
+    		errorHandle = 2;
+    		conflictHandle = fopen(conflictLogFile,'a');
+		conflictError = sprintf( ...
+        '[%s] When comparing the dicom headers it has been found that the file ''%s'' had the same meta-informations as the already-imported file ''%s''. It has therefore been skipped and moved to the conflicts directory. Please resolve the conflicted file ''%s''.\n', ...
+        		datestr(now()), ...
+ 		        file, ...
+		        conflictingFile, ...
+		        conflictedDicomPath ...
+		);
+		fprintf(conflictHandle, conflictError);
+		fprintf(errorHandle, conflictError);
+		fclose(conflictHandle);
+    
+		if ( status == 0 )
+			throw(MException('PPS:IOError','Error while moving conflicted DICOM "%s" from transfer to conflicts folder. Error message was "%s".', dicomPath, mess));
+		end
+    	else
+
+		[status, mess, messid]  = movefile(filePath, dicomPath);
+	
+		if ( status == 0 )
+		    throw(MException('PPS:IOError','Failed in moving DICOM "%s" from transfer to subject folder. Error message was "%s".', file, mess));
+		end
+	end
 end
 
 end

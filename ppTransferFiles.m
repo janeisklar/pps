@@ -19,7 +19,7 @@ if fileCount > 0
 end
 
 %% Import fresh files from the transfer folder
-[unused,importFiles] = ppGetFilesUsingPattern(transferDir, '\.ima$');
+[unused,importFiles] = ppGetFilesUsingPattern(transferDir, 'PHYSIKER[^\.]*\.\d*\.0*1\..*\.ima$');
 
 for i=1:length(importFiles)
     file=importFiles{i};
