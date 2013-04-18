@@ -49,8 +49,11 @@ inputs{1,1} = volumes';
 spm('defaults', 'FMRI');
 spm_jobman('initcfg');
 %spm_jobman('serial', jobs, '', inputs{:});
-cd( [ workingDir 'jobs' ] );
+WD = cd( [ workingDir 'jobs' ] );
+p=[workingDir 'jobs' ]
 matlabbatch = {};
 job
 eval( job );
+%celldisp(matlabbatch{1}.spm.spatial.smooth.data);
 spm_jobman('run', matlabbatch);
+cd( WD );

@@ -24,7 +24,7 @@ command = strcat(command, 'export FSLOUTPUTTYPE=NIFTI;');
 command = strcat(command, sprintf('cd "%s";', dicomPath));
 
 %% Convert to Nifti
-command = strcat(command, sprintf('f=`ls -t *.ima | head -n 1`; export UNPACK_MGH_DTI=0; mri_convert -it siemens_dicom -ot nii $f "%s"', niftiPath));
+command = strcat(command, sprintf('f=`ls *.ima | head -n 1`; export UNPACK_MGH_DTI=0; mri_convert -it siemens_dicom -ot nii $f "%s"', niftiPath));
 
 [s, error]  = unix(command);
 

@@ -1,4 +1,4 @@
-function [ status ] = ppCheckParadigmDicom(path,txtVolumes,size)
+function [ status ] = ppCheckParadigmDicom(path,nVolumes,size)
 % Checks if any DICOM files are missing and verifies the size of
 % DICOM archive
 
@@ -6,8 +6,8 @@ status          = 0;
 [volumes,files] = ppGetFilesUsingPattern(path, '\.ima$');
 
 %% Error if DICOMs are missing
-if volumes <  str2num(txtVolumes)
-    throw(MException('PPS:DICOMCheck','DICOMs are missing (was: %d, expected: %s)', volumes, txtVolumes));
+if volumes <  nVolumes
+    throw(MException('PPS:DICOMCheck','DICOMs are missing (was: %d, expected: %d)', volumes, nVolumes));
     return
 end
 

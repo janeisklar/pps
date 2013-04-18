@@ -29,7 +29,7 @@ end
 % Determine the number of volumes in the 4D-nifti
 nVolumes = ppGetVolumeCountNifti4d(nifti4dPath);
 
-if (nVolumes < str2num(dicomVolumes) )
+if (nVolumes < dicomVolumes )
     throw(MException('PPS:VerificationError','4d-nifti contains too few volumes: "%s".', nifti4dPath)); 
 end
 

@@ -27,7 +27,9 @@ measurementsDir    = strcat(workingDir,        'measurements',     DS);
 measurementDateDir = strcat(measurementsDir,   scanDate,           DS);
 measurementLinkDir = strcat(measurementDateDir,subject,            DS);
 
-dirs = {subjectsDir subjectDir measurementDir scanDir dicomDir niftiDir measurementsDir measurementDateDir measurementLinkDir};
+conflictPath       = strcat(workingDir, 'conflicts');
+
+dirs = {subjectsDir subjectDir measurementDir scanDir dicomDir niftiDir measurementsDir measurementDateDir measurementLinkDir conflictPath};
 
 %% Check if folders already exist or create them otherwise
 for dir=dirs
@@ -103,7 +105,6 @@ for i=1:length(importFiles)
 	
 	if ( hashIndex > 0 )
 		conflictingFile = hashFilePaths{hashIndex};
-		conflictPath = strcat(workingDir, 'conflicts');
 		conflictedDicomPath = strcat(conflictPath, DS, file);
     		[status, mess, messid] = movefile(filePath, conflictedDicomPath);
     
