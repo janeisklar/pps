@@ -5,7 +5,7 @@ measurementPath = ppGetFullPathTrailing(measurementPath);
 findingsLogPath = strcat(measurementPath, 'FINDINGS.fmri');
 
 [unused,nErrors]= unix(sprintf('find %s -name "ERROR.fmri" | wc -l', measurementPath));
-nErrors         = str2num(nErrors)
+nErrors         = str2num(nErrors);
 
 if nErrors > 0
     unix(sprintf('echo "%d Errors, 0 Warnings" > %s', nErrors, findingsLogPath));

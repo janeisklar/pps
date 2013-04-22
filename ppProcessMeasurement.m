@@ -16,7 +16,7 @@ if length(paradigmSpecPath)  < 1
     errorFilePath = errorFilePath
     fid = fopen(errorFilePath, 'w');
     fwrite(fid, sprintf('Paradigms(_$measurement$).txt could not be found for %s\n', measurementPath));
-    fwrite(fid, '\n--------------------------------------------------\n');
+    fwrite(fid, sprintf('\n--------------------------------------------------\n'));
     fclose(fid);
     return
 end
@@ -45,7 +45,7 @@ for k=1:length(paradigms)
     	errorFilePath = errorFilePath
 	fid = fopen(errorFilePath, 'w');
         fwrite(fid, sprintf('%s(%s:%d)\n', e.message, e.stack(1).name, e.stack(1).line));
-        fwrite(fid, '\n--------------------------------------------------\n');
+        fwrite(fid, sprintf('\n--------------------------------------------------\n'));
     	fclose(fid);
     end
 end

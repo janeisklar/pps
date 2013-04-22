@@ -90,15 +90,15 @@ end
 
 %% Move DICOM to the subject directory
 
-fileNameParts           = regexpi(fileName, '(?<before>.*PHYSIKER[^\.]*\.\d*\.)(?<run>0*1)(?<end>\..*\.)(?<date>\d*\.\d*\.ima)$', 'names');
+fileNameParts           = regexpi(fileName, '(?<before>.*PHYSIKER[^\.]*\.\d*\.)(?<run>\d*)(?<end>\..*\.)(?<date>\d*\.\d*\.ima)$', 'names');
 
-filePattern             = strcat(fileNameParts.before, '\d*', fileNameParts.end, '.*\.ima$')
-[unused, importFiles]   = ppGetFilesUsingPattern(transferDir, filePattern)
+filePattern             = strcat(fileNameParts.before, '\d*', fileNameParts.end, '.*\.ima$');
+[unused, importFiles]   = ppGetFilesUsingPattern(transferDir, filePattern);
 
 for i=1:length(importFiles)
 	file      = importFiles{i};
 	filePath  = strcat(transferDir,DS,file);
-	dicomPath = strcat(dicomDir, lower(file))
+	dicomPath = strcat(dicomDir, lower(file));
 	
 	hash      = ppGetUniqueDicomIdentifier(filePath);
 	hashIndex = ppInList(hash, hashes);
