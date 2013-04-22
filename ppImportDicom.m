@@ -81,7 +81,7 @@ if ( createParadigmLink )
     status = ppCreateSymlink(scanTarget, paradigmLink);
     
     if ( status == 0 )
-        throw(MException('PPS:IOError','Failed in creating link from "%s" to "%s". Error message was "%s".', paradigmLink, scanTarget, mess));
+        throw(MException('PPS:IOError','Failed in creating link from "%s" to "%s". Error message was "%s".', paradigmLink, scanTarget, ''));
     end
 end
 
