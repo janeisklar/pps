@@ -12,7 +12,7 @@ if (strcmp(fileList, ''))
    return 
 end
 
-fileList   = textscan(fileList,'%s','EndOfLine');
+fileList   = textscan(fileList,'%s');
 fileList   = fileList{1};
 
 %% Keep files matching pattern

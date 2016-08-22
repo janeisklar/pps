@@ -5,7 +5,7 @@ returnList = {};
 [status, files] = unix(sprintf('for f in $( find "%s" -iname "*.ima" | grep -ohi ".*PHYSIKER[^\\.]*\\.[0-9]*\\." | sort | uniq ); do f="$f*"; ls $f | head -n 1 | xargs -n1 basename; done', transferPath));
 status          = (status == 0);
 
-files    = textscan(files,'%s','EndOfLine');
+files    = textscan(files,'%s');
 files    = files{1};
 
 %% Keep entries that are directories
