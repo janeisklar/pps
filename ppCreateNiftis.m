@@ -31,7 +31,7 @@ end
 %% If necessary DICOMs are converted into a 4D-nifti
 if ( processing )
 
-    [success, error] = ppConvertDicomToNifti(dicomDir, rNifti4dPath);
+    [success, error] = ppConvertDicomToNifti(dicomDir, rNiftiDir, 'vols');
 
     if ( ~success )
        throw(MException('PPS:DICOMConvert','Failed converting DICOMS to nifties. Error message was "%s".', error));
