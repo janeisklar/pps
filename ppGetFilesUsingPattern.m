@@ -6,14 +6,20 @@ function [ count, returnList ] = ppGetFilesUsingPattern( path, pattern )
 count      = 0;
 returnList = {};
 
-fileList   = ls(path);
+%fileList   = ls(path);
+fileListStruct = dir(path);
 
-if (strcmp(fileList, ''))
+%if (strcmp(fileList, ''))
+%   return 
+%end
+if length(fileListStruct) < 3
    return 
 end
 
-fileList   = textscan(fileList,'%s');
-fileList   = fileList{1};
+fileList={fileListStruct(3:end).name}';
+
+%fileList   = textscan(fileList,'%s');
+%fileList   = fileList{1};
 
 %% Keep files matching pattern
 for i=1:length(fileList)
