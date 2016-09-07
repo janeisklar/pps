@@ -32,4 +32,7 @@ command = strcat(command, sprintf('/z/fmrilab/lab/mcverter/mcverter -o "%s" -F "
 
 success = (s == 0);
 
+CdDicomFolder = sprintf('cd "%s";', dicomPath);
+unix([CdDicomFolder, sprintf('fslorient -copyqform2sform "%s".nii',fullfile(niftiDir,niftiName))]);
+
 end
